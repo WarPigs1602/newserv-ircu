@@ -33,6 +33,7 @@
 #define CHANMODE_NONOTICE   0x2000
 #define CHANMODE_MODNOAUTH  0x4000
 #define CHANMODE_SINGLETARG 0x8000
+#define CHANMODE_REGISTERED 0x10000
 
 #define CHANMODE_ALL        0xFFFF
 #define CHANMODE_DEFAULT    0x2203	/* +ntCN */
@@ -53,6 +54,7 @@
 #define IsNoNotice(x)   ((x)->flags & CHANMODE_NONOTICE)
 #define IsModNoAuth(x)  ((x)->flags & CHANMODE_MODNOAUTH)
 #define IsSingleTarg(x) ((x)->flags & CHANMODE_SINGLETARG)
+#define IsRegistered(x) ((x)->flags & CHANMODE_REGISTERED)
 
 #define SetNoExtMsg(x)   ((x)->flags |= CHANMODE_NOEXTMSG)
 #define SetTopicLimit(x) ((x)->flags |= CHANMODE_TOPICLIMIT)
@@ -70,6 +72,7 @@
 #define SetNoNotice(x)   ((x)->flags |= CHANMODE_NONOTICE)
 #define SetModNoAuth(x)  ((x)->flags |= CHANMODE_MODNOAUTH)
 #define SetSingleTarg(x) ((x)->flags |= CHANMODE_SINGLETARG)
+#define SetRegistered(x) ((x)->flags |= CHANMODE_REGISTERED)
 
 #define ClearNoExtMsg(x)   ((x)->flags &= ~CHANMODE_NOEXTMSG)
 #define ClearTopicLimit(x) ((x)->flags &= ~CHANMODE_TOPICLIMIT)
@@ -87,6 +90,7 @@
 #define ClearNoNotice(x)   ((x)->flags &= ~CHANMODE_NONOTICE)
 #define ClearModNoAuth(x)  ((x)->flags &= ~CHANMODE_MODNOAUTH)
 #define ClearSingleTarg(x) ((x)->flags &= ~CHANMODE_SINGLETARG)
+#define ClearRegistered(x) ((x)->flags &= ~CHANMODE_REGISTERED)
 
 #define     CUMODE_OP      0x80000000
 #define     CUMODE_VOICE   0x40000000

@@ -313,7 +313,7 @@ void chanservjoinchan(channel *cp) {
   /* By default, we set the forcemodes and the default modes, but never denymodes..
    * OK, actually we should only set the default modes if our timestamp is older.*/
   if (cp->timestamp > rcp->ltimestamp)
-    themodes |= CHANMODE_DEFAULT;
+    themodes |= (CHANMODE_DEFAULT | CHANMODE_REGISTERED);
   else
     themodes=0;
     

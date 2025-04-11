@@ -37,6 +37,7 @@ const flag cmodeflags[] = {
    { 'N', CHANMODE_NONOTICE    },
    { 'M', CHANMODE_MODNOAUTH   },
    { 'T', CHANMODE_SINGLETARG  },
+   { 'R', CHANMODE_REGISTERED  },
    { '\0', 0 } };   
 
 void channelstats(int hooknum, void *arg);
