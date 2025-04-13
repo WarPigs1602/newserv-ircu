@@ -182,6 +182,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
           userid=0;
           *accountts++='\0';
           np->accountts=strtoul(accountts,&accountid,10);
+		  np->accountts=time(NULL);	  
           if(accountid) {
             userid=strtoul(accountid + 1,&accountflags,10);
             if(userid) {
@@ -361,10 +362,10 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     return CMD_OK;
   }
   
-  accountts=strtoul(cargv[2],NULL,10);
+  accountts=time(NULL);
   userid=strtoul(cargv[3],NULL,10);
   if(cargc>=5)
-    accountflags=strtoull(cargv[4],NULL,10);
+    accountflags=strtoull(cargv[2],NULL,10);
 
   /* allow user flags to change if all fields match */
   if (IsAccount(target)) {
