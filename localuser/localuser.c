@@ -306,7 +306,7 @@ void sendnickmsg(nick *np) {
   if (IsAccount(np)) {
     if (np->auth) {
       if(np->auth->flags) {
-        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu:%lu", np->authname, np->auth->flags,np->auth->userid);
+        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu:%lu", np->authname, np->auth->userid, np->auth->flags);
       } else {
         snprintf(accountbuf,sizeof(accountbuf)," %s:4:%lu",np->authname, np->auth->userid);
       }
@@ -601,7 +601,7 @@ void sendaccountmessage(nick *np) {
   if (connected && IsAccount(np)) {
     if (np->auth) {
       if (np->auth->flags) {
-        irc_send("%s AC %s %s %ld %lu %"PRIu64,mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->flags, np->auth->userid);
+        irc_send("%s AC %s %s %ld %lu %"PRIu64,mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid, np->auth->flags);
       } else {
         irc_send("%s AC %s %s %ld %lu",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid);
       }

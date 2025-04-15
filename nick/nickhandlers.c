@@ -365,15 +365,15 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
   }
   
   accountts=time(NULL);
-  userid=strtoul(cargv[3],NULL,10);
+  userid=strtoul(cargv[2],NULL,10);
   if(cargc>=5)
-    accountflags=strtoull(cargv[2],NULL,10);
+    accountflags=strtoull(cargv[3],NULL,10);
 
   /* allow user flags to change if all fields match */
   if (IsAccount(target)) {
     void *arg[2];
 
-    if (!target->auth || strcmp(target->auth->name,cargv[1]) || (target->auth->userid != userid) || (target->accountts != accountts)) {
+    if (!target->auth || strcmp(target->auth->name,cargv[1]) || (target->auth->userid != userid) || (target->auth->flags != accountflags)) {
       return CMD_OK;
     }
 
