@@ -313,10 +313,10 @@ void chanservjoinchan(channel *cp) {
   /* By default, we set the forcemodes and the default modes, but never denymodes..
    * OK, actually we should only set the default modes if our timestamp is older.*/
   if (cp->timestamp > rcp->ltimestamp)
-    themodes |= (CHANMODE_DEFAULT | CHANMODE_REGISTERED);
+    themodes |= CHANMODE_DEFAULT;
   else
     themodes=0;
-    
+  themodes |= CHANMODE_REGISTERED;    
   themodes = (themodes | rcp->forcemodes) & ~rcp->denymodes;
   
   /* Now, if someone has just created a channel and we are going to set +i
@@ -1499,7 +1499,7 @@ regchan *cs_addchan(chanindex *cip, nick *sender, reguser *addedby, reguser *fou
   if (CIsAutoLimit(rcp)) {
     rcp->forcemodes |= CHANMODE_LIMIT;
   }
-
+  rcp->forcemodes |= CHANMODE_REGISTERED;
   rcp->autolimit=5;
   rcp->banstyle=0;
 
