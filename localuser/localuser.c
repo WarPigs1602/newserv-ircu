@@ -306,12 +306,12 @@ void sendnickmsg(nick *np) {
   if (IsAccount(np)) {
     if (np->auth) {
       if(np->auth->flags) {
-        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu:%lu", np->authname, np->auth->userid, np->auth->flags);
+        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu:%lu", np->authname, np->auth->flags, np->auth->userid);
       } else {
-        snprintf(accountbuf,sizeof(accountbuf)," %s:4:%lu",np->authname, np->auth->userid);
+        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu",np->authname, np->auth->userid);
       }
     } else if(np->authname) {
-      snprintf(accountbuf,sizeof(accountbuf)," %s:0",np->authname);
+      snprintf(accountbuf,sizeof(accountbuf)," %s",np->authname);
     }
   }
 
