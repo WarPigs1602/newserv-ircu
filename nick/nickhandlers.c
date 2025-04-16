@@ -31,7 +31,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
   char *accountflags;
   struct irc_in_addr ipaddress, ipaddress_canonical;
   char *accountid;
-  unsigned long userid;
+  unsigned long userid, flags;
   
   if (cargc==2) { /* rename */
     char oldnick[NICKLEN+1];
@@ -178,24 +178,26 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
       if (IsAccount(np)) {
         sethostarg++;
 
-        if ((accountts=strchr(cargv[accountarg],':'))) {
+        if ((accountflags=strchr(cargv[accountarg],':'))) {
           userid=0;
-          *accountts++='\0';
-          np->accountts=strtoul(accountts,&accountid,10);
+          *accountflags++='\0';
+          flags =strtoul(accountflags,&accountid,10);
 		  np->accountts=time(NULL);	  
           if(accountid) {
-            userid=strtoul(accountid + 1,&accountflags,10);
+            userid=strtoul(accountid + 1,NULL,10);
             if(userid) {
               np->auth=findorcreateauthname(userid, cargv[accountarg]);
               np->authname=np->auth->name;
               np->auth->usercount++;
               np->nextbyauthname=np->auth->nicks;
               np->auth->nicks=np;
-              if(accountflags)
-                np->auth->flags=strtoull(accountflags + 1,NULL,10);
-            }
-			if(isloaded("chanserv") == 1)
+              if(flags)
+                np->auth->flags=flags;
+			  else
+                np->auth->flags=0;				  
+			  if(isloaded("chanserv") == 1)
 				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);
+            }
           }
           if(!userid) {
             np->authname=malloc(strlen(cargv[accountarg]) + 1);
