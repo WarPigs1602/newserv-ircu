@@ -368,7 +368,7 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
   
   accountts=time(NULL);
   userid=strtoul(cargv[2],NULL,10);
-  if(cargc>=5)
+  if(cargc>=4)
     accountflags=strtoull(cargv[3],NULL,10);
 
   /* allow user flags to change if all fields match */
@@ -383,7 +383,7 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     arg[0] = target->auth;
     arg[1] = &oldflags;
     
-    if (cargc>=5)
+    if (cargc>=4)
       target->auth->flags=accountflags;
 
     triggerhook(HOOK_AUTH_FLAGSUPDATED, (void *)arg);
@@ -404,7 +404,7 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     target->authname=target->auth->name;
     target->nextbyauthname = target->auth->nicks;
     target->auth->nicks = target;
-    if (cargc>=5)
+    if (cargc>=4)
       target->auth->flags=accountflags;
   }
 
