@@ -194,7 +194,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
               if(flags)
                 np->auth->flags=flags;
 			  else
-                np->auth->flags=0;				  
+                np->auth->flags=4;				  
 			  if(isloaded("chanserv") == 1)
 				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);
             }
