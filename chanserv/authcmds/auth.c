@@ -77,6 +77,7 @@ int csa_auth(void *source, int cargc, char **cargv, CRAlgorithm alg) {
     }
   }
 
+  rup->lastauth=time(NULL);
   return csa_completeauth(sender, rup, authtype);
 }
 
@@ -89,7 +90,6 @@ int csa_completeauth(nick *sender, reguser *rup, char *authtype) {
   time_t oldlastauth;
 
   oldlastauth=rup->lastauth;
-
   if(!csa_completeauth2(rup, sender->nick, sender->ident, sender->host->name->content, authtype, chanservstdmessage, sender))
     return CMD_ERROR;
 

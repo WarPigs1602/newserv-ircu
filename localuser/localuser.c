@@ -606,7 +606,7 @@ void sendaccountmessage(nick *np) {
         irc_send("%s AC %s %s %ld 4",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid);
       }
     } else {
-      irc_send("%s AC %s %s 0 0",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid);
+      irc_send("%s AC %s %s 0 0",mynumeric->content, longtonumeric(np->numeric,5), np->authname);
     }
   }
 }

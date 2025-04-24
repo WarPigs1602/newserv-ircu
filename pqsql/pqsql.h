@@ -1,7 +1,7 @@
 #ifndef __PQSQL_DB_H
 #define __PQSQL_DB_H
 
-#include <libpq-fe.h>
+#include </usr/include/postgresql/libpq-fe.h>
 
 #define PQ_ERRORMSG_LENGTH 1024
 

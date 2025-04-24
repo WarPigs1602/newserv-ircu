@@ -8,6 +8,7 @@
 #include "../irc/irc_config.h"
 #include "../core/error.h"
 #include "../core/hooks.h"
+#include "../core/modules.h"
 #include "../lib/sstring.h"
 #include "../server/server.h"
 #include "../parser/parser.h"
@@ -27,7 +28,6 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
   nick *np,*np2;
   nick **nh;
   char *fakehost;
-  char *accountts;
   char *accountflags;
   struct irc_in_addr ipaddress, ipaddress_canonical;
   char *accountid;
@@ -96,7 +96,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
     triggerhook(HOOK_NICK_RENAME,harg);
   } else if (cargc>=8) { /* new nick */
     /* Jupiler 2 1016645147 ~Jupiler www.iglobal.be +ir moo [FUTURE CRAP HERE] DV74O] BNBd7 :Jupiler */
-    timestamp=strtol(cargv[2],NULL,10);
+    timestamp=time(NULL);
     np=getnickbynick(cargv[0]);
     if (np!=NULL) {
       /* Nick collision */
@@ -183,6 +183,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
           *accountflags++='\0';
           flags =strtoul(accountflags,&accountid,10);
 		  np->accountts=time(NULL);	  
+		  np->timestamp=time(NULL);	
           if(accountid) {
             userid=strtoul(accountid + 1,NULL,10);
             if(userid) {
@@ -195,8 +196,9 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
                 np->auth->flags=flags;
 			  else
                 np->auth->flags=4;				  
-			  if(isloaded("chanserv") == 1)
-				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);
+			  if(isloaded("chanserv") == 1) {
+				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);	
+			  }
             }
           }
           if(!userid) {
@@ -227,7 +229,6 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
     
     /* And the nick hash table */
     addnicktohash(np);      
-    
     /* Trigger the hook */
     triggerhook(HOOK_NICK_NEWNICK,np);
   } else {
@@ -382,7 +383,8 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     oldflags = target->auth->flags;
     arg[0] = target->auth;
     arg[1] = &oldflags;
-    
+	target->accountts = accountts;
+	target->timestamp = accountts;
     if (cargc>=4)
       target->auth->flags=accountflags;
 
@@ -393,6 +395,7 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
   
   SetAccount(target);
   target->accountts=accountts;
+  target->timestamp = accountts;
 
   if(!userid) {
     target->auth=NULL;
