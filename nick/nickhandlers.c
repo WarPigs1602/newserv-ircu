@@ -1,6 +1,7 @@
 /* nickhandlers.c */
 
 #include "nick.h"
+#include "../chanserv/chanserv.h"
 #include "../lib/flags.h"
 #include "../lib/irc_string.h"
 #include "../lib/base64.h"
@@ -197,7 +198,11 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
 			  else
                 np->auth->flags=4;				  
 			  if(isloaded("chanserv") == 1) {
-				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);	
+				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);
+                reguser *rup = getreguserfromnick(np);	
+                if(rup) {
+					rup->lastauth=time(NULL);
+				}					
 			  }
             }
           }
@@ -409,6 +414,10 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     target->auth->nicks = target;
     if (cargc>=4)
       target->auth->flags=accountflags;
+	reguser *rup = getreguserfromnick(target);	
+	if(rup) {
+		rup->lastauth=time(NULL);
+	}	  
   }
 
   triggerhook(HOOK_NICK_ACCOUNT, (void *)target);
