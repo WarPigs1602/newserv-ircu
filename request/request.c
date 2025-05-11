@@ -136,7 +136,7 @@ void rq_registeruser(void) {
   channel *cp;
 
   rqnick = registerlocaluserflags(rq_nick->content, rq_user->content, rq_host->content,
-                             rq_real->content, rq_auth->content, rq_authid, 36,
+                             rq_real->content, rq_auth->content, rq_authid, 0,
                              UMODE_ACCOUNT | UMODE_SERVICE | UMODE_OPER,
                              rq_handler);
 

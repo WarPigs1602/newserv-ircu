@@ -341,7 +341,6 @@ int localjoinchannel(nick *np, channel *cp) {
     
   if (connected) {
     irc_send("%s J %s %lu",longtonumeric(np->numeric,5),cp->index->name->content,cp->timestamp);
-    irc_send("%s M %s +R %lu",mynumeric->content,cp->index->name->content,cp->timestamp);
   }
 
   triggerhook(HOOK_CHANNEL_JOIN, harg);

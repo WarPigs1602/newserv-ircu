@@ -306,12 +306,12 @@ void sendnickmsg(nick *np) {
   if (IsAccount(np)) {
     if (np->auth) {
       if(np->auth->flags) {
-        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu:%lu", np->authname, np->auth->flags, np->auth->userid);
+        snprintf(accountbuf,sizeof(accountbuf)," %s:%ld:%lu:%"PRIu64,np->authname,np->accountts,np->auth->userid,np->auth->flags);
       } else {
-        snprintf(accountbuf,sizeof(accountbuf)," %s:%lu",np->authname, np->auth->userid);
+        snprintf(accountbuf,sizeof(accountbuf)," %s:%ld:%lu",np->authname,np->accountts,np->auth->userid);
       }
     } else if(np->authname) {
-      snprintf(accountbuf,sizeof(accountbuf)," %s",np->authname);
+      snprintf(accountbuf,sizeof(accountbuf)," %s:%ld:0",np->authname,np->accountts);
     }
   }
 
@@ -601,12 +601,12 @@ void sendaccountmessage(nick *np) {
   if (connected && IsAccount(np)) {
     if (np->auth) {
       if (np->auth->flags) {
-        irc_send("%s AC %s %s %ld %ld",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid, np->auth->flags);
+        irc_send("%s AC %s %s %ld %lu %"PRIu64,mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->accountts, np->auth->userid, np->auth->flags);
       } else {
-        irc_send("%s AC %s %s %ld 4",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->auth->userid);
+        irc_send("%s AC %s %s %ld %lu",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->accountts, np->auth->userid);
       }
     } else {
-      irc_send("%s AC %s %s 0 0",mynumeric->content, longtonumeric(np->numeric,5), np->authname);
+      irc_send("%s AC %s %s %ld 0",mynumeric->content, longtonumeric(np->numeric,5), np->authname, np->accountts);
     }
   }
 }

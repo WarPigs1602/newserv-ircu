@@ -679,11 +679,6 @@ int handlemodemsg(void *source, int cargc, char **cargv) {
         changes |= MODECHANGE_MODES;
         break;
       
-      case 'R':
-        if (dir) { SetRegistered(cp); } else { ClearRegistered(cp); }
-        changes |= MODECHANGE_MODES;
-        break;
-		
       case 'T':
         if (dir) { SetSingleTarg(cp); } else { ClearSingleTarg(cp); }
         changes |= MODECHANGE_MODES;
@@ -894,11 +889,6 @@ int handleclearmodemsg(void *source, int cargc, char **cargv) {
         changes |= MODECHANGE_MODES;
         break;
 
-      case 'R':
-        ClearRegistered(cp);
-        changes |= MODECHANGE_MODES;
-        break;
-		
       case 'b':
         clearallbans(cp);
 	changes |= MODECHANGE_BANS;

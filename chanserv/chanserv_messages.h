@@ -48,11 +48,11 @@ BeginMessages() {
   msg(QM_CHANUSERUNKNOWN, "User $0 is not known on $1.", "ss"),
   msg(QM_INVALIDCHANLEVCHANGE, "Invalid or disallowed flag specified.", ""),
   msg(QM_USERISAUTHEDAS, "$0 is authed as $1.", "ss"),
-  msg(QM_USERISSTAFF,  "QuakeNet Staff : Staff Member", ""),
-  msg(QM_USERISHELPER, "QuakeNet Staff : IRC Support", ""),
-  msg(QM_USERISOPER,   "QuakeNet Staff : IRC Operator", ""),
-  msg(QM_USERISADMIN,  "QuakeNet Staff : IRC Administrator", ""),
-  msg(QM_USERISDEV,    "QuakeNet Staff : Developer", ""),
+  msg(QM_USERISSTAFF,  "MidiAndMore.Net Staff : Staff Member", ""),
+  msg(QM_USERISHELPER, "MidiAndMore.Net Staff : IRC Support", ""),
+  msg(QM_USERISOPER,   "MidiAndMore.Net Staff : IRC Operator", ""),
+  msg(QM_USERISADMIN,  "MidiAndMore.Net Staff : IRC Administrator", ""),
+  msg(QM_USERISDEV,    "MidiAndMore.Net Staff : Developer", ""),
   msg(QM_WHOISHEADER, "$0 is known on the following channels:", "s"),
   msg(QM_WHOISCOLS, "Channel                        Flags", ""),
   msg(QM_USERONNOCHANS, "$0 is not known on any channels.", "s"),
@@ -70,7 +70,7 @@ BeginMessages() {
   msg(QM_NOTPROTECTED, "Sorry, your nick $0 is not protected.", "s"),
   msg(QM_SAMEAUTH, "$0 is authed as $1. Cannot reclaim nick.", "ss"),
   msg(QM_AUTHFAIL, "Username or password incorrect.", ""),
-  msg(QM_AUTHOK, "You are now logged in as $0.\nRemember: NO-ONE from QuakeNet will ever ask for your password.  NEVER send your password to ANYONE except Q@CServe.quakenet.org.", "s"),
+  msg(QM_AUTHOK, "You are now logged in as $0.\nRemember: NO-ONE from MidiAndMore.Net will ever ask for your password.  NEVER send your password to ANYONE except M@services.midiandmore.net.", "s"),
   msg(QM_NEWACCOUNT, "Account $0 created successfully.\nInformation about how to access and use your new account will be sent to your email address, $1.\nIf you do not see an email soon be sure to check your spam folder.", "ss"),
   msg(QM_AUTHNAMEINUSE, "Someone already has the account name $0!\nIf this is your account use AUTH to login, otherwise please change your nick using /NICK and try again.", "s"),
   msg(QM_ALREADYONCHAN, "You're already on $0.", "s"),
@@ -141,7 +141,7 @@ BeginMessages() {
   msg(QM_STATSADDED, "Date added: $0", "T"),
   msg(QM_STATSJOINS, "Since $0: maximum size $1, $2 joins ($3 joins/day).", "Tddg"),
   msg(QM_STATSLASTACTIVE, "Last active: $0", "T"),
-  msg(QM_AUTHSUSPENDED, "Your Q account is suspended.", ""),
+  msg(QM_AUTHSUSPENDED, "Your M account is suspended.", ""),
   msg(QM_REASON, "Reason: $0", "s"),
   msg(QM_EXPIRES, "Expires: $0", "T"),
   msg(QM_TOOMANYAUTHS, "Too many users AUTH'd to this account.", ""),
@@ -152,7 +152,7 @@ BeginMessages() {
   msg(QM_SPEWHEADER, "Username:       Suspended: Email:                         Last auth:      Last user@host:", ""),
   msg(QM_TOOMANYRESULTS, "Found over $0 $1, truncating list.", "ds"),
   msg(QM_RESULTCOUNT, "Found $0 $1$2.", "uss"),
-  msg(QM_SUSPENDKILL, "Attention: Your Q account has been suspended. You are being disconnected.", ""),
+  msg(QM_SUSPENDKILL, "Attention: Your M account has been suspended. You are being disconnected.", ""),
   msg(QM_LISTFLAGSHEADER, "Username:       Id:        Flags:            Email:                         Last email change:", ""),
   msg(QM_SUSPENDUSERLISTHEADER, "Username:       Suspend type: Suspended by:   Date suspended:     Expires:        Reason:", ""), /* @TIMELEN */
   msg(QM_SUSPENDCHANLISTHEADER, "Channel:                       Suspended by:   Date suspended:     Reason:", ""), /* @TIMELEN */
@@ -250,7 +250,7 @@ BeginMessages() {
   msg(QM_PWTOLONG, "Sorry, but new password is too long (maximum length 10 chars)", ""),
   msg(QM_TOOMANYCHANNELS, "User is known on too many channels.", ""),
   msg(QM_PWINVALID, "Password contains invalid characters.", ""),
-  msg(QM_TOOMANYAUTHATTEMPTS, "Too many auth attempts -- reconnect to QuakeNet to try again.", ""),
+  msg(QM_TOOMANYAUTHATTEMPTS, "Too many auth attempts -- reconnect to MidiAndMore.Net to try again.", ""),
 } 
 EndMessages()
 #endif

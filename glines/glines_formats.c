@@ -21,22 +21,31 @@
  * @param[in] def_user Default value for user part.
  */
 static void
-canon_userhost(char *userhost, char **user_p, char **host_p, char *def_user) {
-  char *tmp;
+canon_userhost(char *userhost, char **nick_p, char **user_p, char **host_p, char *def_user) {
+  char *tmp, *s;
 
   if (*userhost == '$') {
     *user_p = userhost;
     *host_p = NULL;
+    *nick_p = NULL;
     return;
   }
 
-  if (!(tmp = strchr(userhost, '@'))) {
-    *user_p = def_user;
-    *host_p = userhost;
-  } else {
-    *user_p = userhost;
+  if ((tmp = strchr(userhost, '!'))) {
+    *nick_p = userhost;
     *(tmp++) = '\0';
+  } else {
+    *nick_p = def_user;
+    tmp = userhost;
+  }
+
+  if (!(s = strchr(tmp, '@'))) {
+    *user_p = def_user;
     *host_p = tmp;
+  } else {
+    *user_p = tmp;
+    *(s++) = '\0';
+    *host_p = s;
   }
 }
 
@@ -44,7 +53,7 @@ gline *makegline(const char *mask) {
   /* populate gl-> user,host,node,nick and set appropriate flags */
   gline *gl;
   char dupmask[512];
-  char *user, *host;
+  char *nick, *user, *host;
   const char *pos;
   int count;
 
@@ -80,7 +89,7 @@ gline *makegline(const char *mask) {
   }
 
   strncpy(dupmask, mask, sizeof(dupmask));
-  canon_userhost(dupmask, &user, &host, "*");
+  canon_userhost(dupmask, &nick, &user, &host, "*");
 
   if (ipmask_parse(host, &gl->ip, &gl->bits))
     gl->flags |= GLINE_IPMASK;
@@ -99,6 +108,9 @@ gline *makegline(const char *mask) {
     freegline(gl);
     return NULL;
   }
+
+  if (strcmp(nick, "*") != 0)
+    gl->nick = getsstring(nick, 512);
 
   if (strcmp(user, "*") != 0)
     gl->user = getsstring(user, 512);
@@ -124,7 +136,8 @@ char *glinetostring(gline *gl) {
     return mask;
   }
 
-  snprintf(mask, sizeof(mask), "%s@%s",
+  snprintf(mask, sizeof(mask), "%s!%s@%s",
+    gl->nick ? gl->nick->content : "*",
     gl->user ? gl->user->content : "*",
     gl->host ? gl->host->content : "*");
 

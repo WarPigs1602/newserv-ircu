@@ -9,7 +9,6 @@
 #include "../irc/irc_config.h"
 #include "../core/error.h"
 #include "../core/hooks.h"
-#include "../core/modules.h"
 #include "../lib/sstring.h"
 #include "../server/server.h"
 #include "../parser/parser.h"
@@ -29,10 +28,11 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
   nick *np,*np2;
   nick **nh;
   char *fakehost;
+  char *accountts;
   char *accountflags;
   struct irc_in_addr ipaddress, ipaddress_canonical;
   char *accountid;
-  unsigned long userid, flags;
+  unsigned long userid;
   
   if (cargc==2) { /* rename */
     char oldnick[NICKLEN+1];
@@ -97,7 +97,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
     triggerhook(HOOK_NICK_RENAME,harg);
   } else if (cargc>=8) { /* new nick */
     /* Jupiler 2 1016645147 ~Jupiler www.iglobal.be +ir moo [FUTURE CRAP HERE] DV74O] BNBd7 :Jupiler */
-    timestamp=time(NULL);
+    timestamp=strtol(cargv[2],NULL,10);
     np=getnickbynick(cargv[0]);
     if (np!=NULL) {
       /* Nick collision */
@@ -179,31 +179,27 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
       if (IsAccount(np)) {
         sethostarg++;
 
-        if ((accountflags=strchr(cargv[accountarg],':'))) {
+        if ((accountts=strchr(cargv[accountarg],':'))) {
           userid=0;
-          *accountflags++='\0';
-          flags =strtoul(accountflags,&accountid,10);
-		  np->accountts=time(NULL);	  
-		  np->timestamp=time(NULL);	
+          *accountts++='\0';
+          np->accountts=strtoul(accountts,&accountid,10);
           if(accountid) {
-            userid=strtoul(accountid + 1,NULL,10);
+            userid=strtoul(accountid + 1,&accountflags,10);
             if(userid) {
               np->auth=findorcreateauthname(userid, cargv[accountarg]);
               np->authname=np->auth->name;
               np->auth->usercount++;
               np->nextbyauthname=np->auth->nicks;
               np->auth->nicks=np;
-              if(flags)
-                np->auth->flags=flags;
-			  else
-                np->auth->flags=4;				  
+              if(accountflags)
+                np->auth->flags=strtoull(accountflags + 1,NULL,10);
 			  if(isloaded("chanserv") == 1) {
 				irc_send("%s O %s :*** You are now authed as %s",getmynumeric(), longtonumeric(np->numeric,5), np->authname);
                 reguser *rup = getreguserfromnick(np);	
                 if(rup) {
 					rup->lastauth=time(NULL);
 				}					
-			  }
+			  }			
             }
           }
           if(!userid) {
@@ -234,6 +230,7 @@ int handlenickmsg(void *source, int cargc, char **cargv) {
     
     /* And the nick hash table */
     addnicktohash(np);      
+    
     /* Trigger the hook */
     triggerhook(HOOK_NICK_NEWNICK,np);
   } else {
@@ -372,25 +369,24 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     return CMD_OK;
   }
   
-  accountts=time(NULL);
-  userid=strtoul(cargv[2],NULL,10);
-  if(cargc>=4)
-    accountflags=strtoull(cargv[3],NULL,10);
+  accountts=strtoul(cargv[2],NULL,10);
+  userid=strtoul(cargv[3],NULL,10);
+  if(cargc>=5)
+    accountflags=strtoull(cargv[4],NULL,10);
 
   /* allow user flags to change if all fields match */
   if (IsAccount(target)) {
     void *arg[2];
 
-    if (!target->auth || strcmp(target->auth->name,cargv[1]) || (target->auth->userid != userid) || (target->auth->flags != accountflags)) {
+    if (!target->auth || strcmp(target->auth->name,cargv[1]) || (target->auth->userid != userid) || (target->accountts != accountts)) {
       return CMD_OK;
     }
 
     oldflags = target->auth->flags;
     arg[0] = target->auth;
     arg[1] = &oldflags;
-	target->accountts = accountts;
-	target->timestamp = accountts;
-    if (cargc>=4)
+    
+    if (cargc>=5)
       target->auth->flags=accountflags;
 
     triggerhook(HOOK_AUTH_FLAGSUPDATED, (void *)arg);
@@ -400,7 +396,6 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
   
   SetAccount(target);
   target->accountts=accountts;
-  target->timestamp = accountts;
 
   if(!userid) {
     target->auth=NULL;
@@ -412,12 +407,8 @@ int handleaccountmsg(void *source, int cargc, char **cargv) {
     target->authname=target->auth->name;
     target->nextbyauthname = target->auth->nicks;
     target->auth->nicks = target;
-    if (cargc>=4)
+    if (cargc>=5)
       target->auth->flags=accountflags;
-	reguser *rup = getreguserfromnick(target);	
-	if(rup) {
-		rup->lastauth=time(NULL);
-	}	  
   }
 
   triggerhook(HOOK_NICK_ACCOUNT, (void *)target);
